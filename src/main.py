@@ -1,20 +1,18 @@
-import json
+from io import BytesIO
 from os import environ
-
-from github import Github
-from firebase import firestore
-
 from uuid import uuid4
 
+import numpy as np
+from github import Github
+from matplotlib import pyplot as plt
+
+from firebase import firestore
 
 OPEN_API_ENDPOINT = environ.get('INPUT_OPENAPI-ENDPOINT', "Could not find endpoint")
 GITHUB_EVENT_PATH = environ.get('GITHUB_EVENT_PATH')
 GITHUB_REPOSITORY = environ.get('GITHUB_REPOSITORY', 'awtkns/openapi-perf-action')
+GITHUB_TOKEN = environ.get('GITHUB_TOKEN', '')
 
-from matplotlib import pyplot as plt
-import numpy as np
-from io import BytesIO
-from base64 import b64encode
 
 
 def fig_to_base64():
@@ -47,25 +45,10 @@ if __name__ == '__main__':
 
     url = f'charts/{uuid4().hex}'
     img = firestore.child(url).put(file)
-    print(img)
-    # #
-    # # with open(GITHUB_EVENT_PATH) as fp:
-    # #     print(json.load(fp))
-    #
-    # print(environ)
-    # print(OPEN_API_ENDPOINT)
 
-    g = Github('ac666a14e4c278807e48fb1fb6288082088d7ad5')
-    print(g.get_user().name)
-
+    g = Github(GITHUB_TOKEN)
     repo = g.get_repo(GITHUB_REPOSITORY)
-    print(repo)
-
-    pr_id = 1
-    pr = repo.get_pull(pr_id)
-    print(pr)
-
-    print()
+    pr = repo.get_pull(1)
     pr.create_issue_comment(
         'Performance Report\n---\n' +
         f'<p align="center"><img src="{firestore.child(url).get_url("")}"></p>'
