@@ -1,5 +1,7 @@
 FROM python:alpine
 
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 
-COPY main.py /src/main.py
+COPY ./src /src
 CMD python /src/main.py

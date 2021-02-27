@@ -1,0 +1,3 @@
+pygithub
+pyrebase4
+matplotlib
