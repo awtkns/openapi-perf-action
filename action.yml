@@ -1,5 +1,8 @@
 name: 'OpenAPI Performance Test'
 description: 'Automatically Performance Test OpenAPI Endpoints'
+branding:
+  icon: bar-chart-2
+  color: gray-dark
 inputs:
   openapi-endpoint:
     description: 'The URL of the openapi schema under test'
