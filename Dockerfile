@@ -2,4 +2,4 @@ FROM python:alpine
 
 COPY main.py main.py
 
-CMD python main.py
+ENTRYPOINT ['python main.py']
