@@ -1,9 +1,10 @@
-on: [push]
+on: issue_comment
 
 jobs:
-  hello_world_job:
-    runs-on: ubuntu-latest
+  openapi-perf:
     name: Builds and Runs the OpenAPI Performance Test Action
+    if: ${{ github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
     steps:
     - name: OpenAPI Performance Test
       uses: awtkns/openapi-perf-action@main
