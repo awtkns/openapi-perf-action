@@ -1,5 +1,8 @@
 FROM python:alpine
+WORKDIR /src
+
+ENV PYTHONPATH /src
 
 COPY main.py main.py
 
-ENTRYPOINT ['python main.py']
+CMD python main.py
