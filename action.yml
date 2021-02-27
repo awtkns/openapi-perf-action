@@ -1,0 +1,12 @@
+name: 'OpenAPI Performance Test'
+description: 'Automatically Performance Test OpenAPI Endpoints'
+inputs:
+  openapi-endpoint:
+    description: 'The URL of the openapi schema under test'
+    required: true
+    default: 'http://localhost:5000/openapi.json'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.openapi-endpoint }}
