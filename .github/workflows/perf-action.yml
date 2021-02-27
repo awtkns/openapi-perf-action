@@ -6,6 +6,6 @@ jobs:
     name: Builds and Runs the OpenAPI Performance Test Action
     steps:
     - name: OpenAPI Performance Test
-      uses: awtkns/openapi-perf-action@v0.0.3
+      uses: awtkns/openapi-perf-action@v0.0.4
       with:
         openapi-endpoint: 'THIS SHOULD PRINT'
