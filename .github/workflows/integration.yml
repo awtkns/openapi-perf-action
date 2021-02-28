@@ -10,3 +10,4 @@ jobs:
       uses: awtkns/openapi-perf-action@main
       with:
         openapi-endpoint: 'THIS SHOULD PRINT'
+        token: ${{ secrets.GITHUB_TOKEN }}
