@@ -13,4 +13,4 @@ inputs:
     required: true
 runs:
   using: 'docker'
-  image: docker.pkg.github.com/awtkns/openapi-perf-action/action:latest
+  image: docker://awtkns/openapi-perf-action:latest
