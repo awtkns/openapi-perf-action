@@ -14,6 +14,7 @@ OPEN_API_ENDPOINT = environ.get('INPUT_OPENAPI-ENDPOINT', "Could not find endpoi
 GITHUB_EVENT_PATH = environ.get('GITHUB_EVENT_PATH')
 GITHUB_REPOSITORY = environ.get('GITHUB_REPOSITORY', 'awtkns/openapi-perf-action')
 GITHUB_TOKEN = environ.get('GITHUB_TOKEN', '')
+print(GITHUB_TOKEN)
 print(environ)
 
 
