@@ -5,14 +5,16 @@ from uuid import uuid4
 import numpy as np
 from github import Github
 from matplotlib import pyplot as plt
+import jwt
 
 from firebase import firestore
+
 
 OPEN_API_ENDPOINT = environ.get('INPUT_OPENAPI-ENDPOINT', "Could not find endpoint")
 GITHUB_EVENT_PATH = environ.get('GITHUB_EVENT_PATH')
 GITHUB_REPOSITORY = environ.get('GITHUB_REPOSITORY', 'awtkns/openapi-perf-action')
-GITHUB_TOKEN = '5e08c76b14518173d67210d4838012007a1ea1fd'
-
+GITHUB_TOKEN = environ.get('GITHUB_TOKEN', '')
+print(environ)
 
 
 def fig_to_base64():
@@ -47,13 +49,12 @@ if __name__ == '__main__':
     img = firestore.child(url).put(file)
 
     g = Github(GITHUB_TOKEN)
+    print(g.get_repo(GITHUB_REPOSITORY))
+    print(g.get_user().name)
     repo = g.get_repo(GITHUB_REPOSITORY)
     pr = repo.get_pull(1)
     pr.create_issue_comment(
         'Performance Report\n---\n' +
         f'<p align="center"><img src="{firestore.child(url).get_url("")}"></p>'
     )
-
-
-
 
