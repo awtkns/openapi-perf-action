@@ -43,19 +43,16 @@ if __name__ == '__main__':
     url = f'charts/{uuid4().hex}'
     img = firestore.child(url).put(file)
 
-    comment = f'Performance Report\n---\n<p align="center"><img src="{firestore.child(url).get_url("")}"></p>'
+    comment = f'Performance Report\n---\nFrom a serverless function!\n<p align="center"><img src="{firestore.child(url).get_url("")}"></p>'
 
     res = r.post(
         url=APP_ENDPOINT,
-        data={
+        json={
             'content': comment,
             'owner': 'awtkns',
             'repository': 'openapi-perf-action',
             'pr_number': 1
-
         }
     )
 
-    print(res.status_code)
-
-
+    assert res.status_code == 200, "Could not upload Performance report"
