@@ -2,3 +2,4 @@ pygithub
 pyrebase4
 numpy
 matplotlib
+requests

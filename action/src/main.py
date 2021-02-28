@@ -3,11 +3,13 @@ from os import environ
 from uuid import uuid4
 
 import numpy as np
+import requests as r
 from matplotlib import pyplot as plt
 
 from firebase import firestore
 
 OPEN_API_ENDPOINT = environ.get('INPUT_OPENAPI-ENDPOINT', "Could not find endpoint")
+APP_ENDPOINT = 'https://app.openapi-perf.awtkns.com/api/'
 
 
 def fig_to_base64():
@@ -41,8 +43,19 @@ if __name__ == '__main__':
     url = f'charts/{uuid4().hex}'
     img = firestore.child(url).put(file)
 
-    # pr.create_issue_comment(
-    #     'Performance Report\n---\n' +
-    #     f'<p align="center"><img src="{firestore.child(url).get_url("")}"></p>'
-    # )
+    comment = f'Performance Report\n---\n<p align="center"><img src="{firestore.child(url).get_url("")}"></p>'
+
+    res = r.post(
+        url=APP_ENDPOINT,
+        data={
+            'content': comment,
+            'owner': 'awtkns',
+            'repository': 'openapi-perf-action',
+            'pr_number': 1
+
+        }
+    )
+
+    print(res.status_code)
+
 

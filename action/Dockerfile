@@ -3,5 +3,5 @@ FROM python
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-COPY ./action /src
+COPY ./src /src
 CMD python /src/main.py

@@ -4,14 +4,14 @@ from flask import Flask, jsonify, request
 from github3.github import GitHub
 
 
-GITHUB_PRIVATE_KEY = os.environ['APP_PRIVATE_KEY']
-GITHUB_APP_IDENTIFIER = "102603"
+GITHUB_PRIVATE_KEY = os.environ.get('APP_PRIVATE_KEY', '')
+GITHUB_APP_IDENTIFIER = os.environ.get('APP_IDENTIFIER', '')
 app = Flask(__name__)
 
 
 @app.route('/api/', methods=['POST'])
 def matrix():
-    data = request.json
+    data = request.get_json()
     content = data['content']
     owner = data['owner']
     repository = data['repository']
@@ -30,3 +30,7 @@ def matrix():
     issue.create_comment(content)
 
     return jsonify("Post Success"), 200
+
+
+if __name__ == '__main__':
+    app.run()
