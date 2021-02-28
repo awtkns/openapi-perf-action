@@ -8,6 +8,9 @@ inputs:
     description: 'The URL of the openapi schema under test'
     required: true
     default: 'http://localhost:5000/openapi.json'
+  token:
+    description: 'Github token allowing posting of comments'
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
