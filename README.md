@@ -8,7 +8,8 @@
 </p>
 <p align="center">
 <img alt="Tests" src="https://github.com/awtkns/openapi-perf/workflows/Tests/badge.svg" />
-  <img alt="Tests" src="https://github.com/awtkns/openapi-perf-action/actions/workflows/integration.yml/badge.svg" />
+<img alt="Tests" src="https://github.com/awtkns/openapi-perf-action/actions/workflows/integration.yml/badge.svg" />
+<img alt="Docker" src="https://github.com/awtkns/openapi-perf-action/actions/workflows/docker-publish.yml/badge.svg" />
 <img alt="Docs" src="https://github.com/awtkns/fastapi-crudrouter/workflows/docs/badge.svg" />
 </p>
 
