@@ -34,7 +34,7 @@ jobs:
 
       - name: Push image
         run: |
-          IMAGE_ID=${{ secrets=.DOCKER_USERNAME }}/$IMAGE_NAME
+          IMAGE_ID=${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME
 
           # Version Prefixing
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
