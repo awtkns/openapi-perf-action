@@ -33,4 +33,5 @@ def matrix():
 
 
 if __name__ == '__main__':
-    app.run()
+    gh = GitHub()
+    print(gh.meta())
