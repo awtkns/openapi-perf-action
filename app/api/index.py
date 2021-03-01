@@ -26,15 +26,15 @@ class ActionIn(BaseModel):
         return f'{self.owner}/{self.repository}'
 
 
-@app.post('/api/')
-def matrix(action: ActionIn):
+@app.post('/comment')
+def comment_on_pr(action: ActionIn):
     gh = login_as_installation(action)
     get_pr(gh, action).create_comment(action.content)
     return "Post Success", 200
 
 
-@app.post('/api/reaction')
-def matrix(action: ActionIn):
+@app.post('/reaction')
+def react_to_pr(action: ActionIn):
     gh = login_as_installation(action)
     issue = get_pr(gh, action).issue()
 
