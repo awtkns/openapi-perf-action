@@ -12,19 +12,16 @@ from firebase import firestore
 OPEN_API_ENDPOINT = environ.get('INPUT_OPENAPI-ENDPOINT', "Could not find endpoint")
 APP_ENDPOINT = 'https://api.openapi-perf.awtkns.com'
 
-GITHUB_EVENT_PATH = environ.get('GITHUB_EVENT_PATH')
-GITHUB_REPOSITORY = environ.get('GITHUB_REPOSITORY', 'awtkns/openapi-perf-action')
 GITHUB_ACTOR = environ.get('GITHUB_ACTOR', '')
 
 # TODO: Place this infinite loop safeguard in action yml so we don't'
 if '[bot]' in GITHUB_ACTOR:
-    print("skipping as bot")
+    print("[SKIPPING] Bot cannot trigger as safeguard")
+    exit(0)
 
 
-print(environ)
-import json
-with open(GITHUB_EVENT_PATH) as fp:
-    print(json.load(fp))
+with open(environ.get('GITHUB_EVENT_PATH')) as fp:
+    GITHUB_EVENT = json.load(fp)
 
 
 def fig_to_base64():
@@ -36,7 +33,22 @@ def fig_to_base64():
     return plt_bytes
 
 
+def action_factory(content: str) -> dict:
+    return {
+        'content': content,
+        'owner': GITHUB_EVENT['repository']['owner']['login'],
+        'repository': GITHUB_EVENT['repository']['name'],
+        'pr_number': GITHUB_EVENT['issue']['number']
+    }
+
+
 if __name__ == '__main__':
+    res = r.post(
+        url=f'{APP_ENDPOINT}/reaction',
+        json=action_factory('eyes')
+    )
+    assert res.status_code == 200, "Could not React to action " + action
+
     x1 = np.linspace(0.0, 5.0)
     x2 = np.linspace(0.0, 2.0)
 
@@ -59,7 +71,6 @@ if __name__ == '__main__':
     img = firestore.child(url).put(file)
 
     comment = f'Performance Report\n---\nFrom a serverless function!\n<p align="center"><img src="{firestore.child(url).get_url("")}"></p>'
-
     res = r.post(
         url=f'{APP_ENDPOINT}/comment',
         json=action_factory(comment)
