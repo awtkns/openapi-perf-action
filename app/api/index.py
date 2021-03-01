@@ -1,37 +1,56 @@
 import os
 
-from flask import Flask, jsonify, request
+from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException
 from github3.github import GitHub
+from github3.exceptions import NotFoundError, ForbiddenError
+
+GITHUB_PRIVATE_KEY = os.environ.get('APP_PRIVATE_KEY', open('private-key.pem', 'rt').read())
+GITHUB_APP_IDENTIFIER = os.environ.get('APP_IDENTIFIER')
+
+app = FastAPI()
 
 
-GITHUB_PRIVATE_KEY = os.environ.get('APP_PRIVATE_KEY', '')
-GITHUB_APP_IDENTIFIER = os.environ.get('APP_IDENTIFIER', '')
-app = Flask(__name__)
-
-
-@app.route('/api/', methods=['POST'])
-def matrix():
-    data = request.get_json()
-    content = data['content']
-    owner = data['owner']
-    repository = data['repository']
-    pr_number = data['pr_number']
-
+def login_as_installation(account: str):
     gh = GitHub()
-
-    # Login as app
     gh.login_as_app(GITHUB_PRIVATE_KEY.encode(), GITHUB_APP_IDENTIFIER)
 
-    # TODO: Make sure this is valid.
-    installations = [installation.id for installation in gh.app_installations()]
-    gh.login_as_app_installation(GITHUB_PRIVATE_KEY.encode(), GITHUB_APP_IDENTIFIER, installations[0])
+    for install in gh.app_installations():
+        if install.account['login'] == account:
+            gh.login_as_app_installation(
+                GITHUB_PRIVATE_KEY.encode(),
+                GITHUB_APP_IDENTIFIER,
+                install.id
+            )
+            return gh
 
-    issue = gh.pull_request(owner=owner, repository=repository, number=pr_number)
-    issue.create_comment(content)
-
-    return jsonify("Post Success"), 200
+    raise HTTPException(status_code=403, detail="App Installation not found")
 
 
-if __name__ == '__main__':
-    gh = GitHub()
-    print(gh.meta())
+class ActionIn(BaseModel):
+    content: str
+    owner: str
+    repository: str
+    pr_number: int
+
+    @property
+    def repo(self) -> str:
+        return f'{self.owner}/{self.repository}'
+
+
+@app.post('/api/')
+def matrix(action: ActionIn):
+    gh = login_as_installation(action.owner)
+
+    try:
+        gh.pull_request(
+            owner=action.owner,
+            repository=action.repository,
+            number=action.pr_number
+        ).create_comment(action.content)
+    except ForbiddenError:
+        raise HTTPException(403, f"Application not setup for the repository {action.repo}")
+    except NotFoundError:
+        raise HTTPException(404, f"PR #{action.pr_number} does not exist in {action.repo}")
+
+    return "Post Success", 200
