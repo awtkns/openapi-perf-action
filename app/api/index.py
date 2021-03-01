@@ -40,7 +40,7 @@ def react_to_pr(action: ActionIn):
 
     issue._post(
         issue._api + '/reactions',
-        data={"content": 'eyes'},
+        data={"content": action.content},
         headers={'Accept': 'application/vnd.github.squirrel-girl-preview+json'}
     )
 

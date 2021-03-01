@@ -13,6 +13,12 @@ APP_ENDPOINT = 'https://app.openapi-perf.awtkns.com/api/'
 
 GITHUB_EVENT_PATH = environ.get('GITHUB_EVENT_PATH')
 GITHUB_REPOSITORY = environ.get('GITHUB_REPOSITORY', 'awtkns/openapi-perf-action')
+GITHUB_ACTOR = environ.get('GITHUB_ACTOR', '')
+
+# TODO: Place this infinite loop safeguard in action yml so we don't'
+if '[bot]' in GITHUB_ACTOR:
+    print("skipping as bot")
+
 
 print(environ)
 import json
