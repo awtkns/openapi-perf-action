@@ -13,4 +13,5 @@ inputs:
     required: true
 runs:
   using: 'docker'
+  pre-if: ${{ github.actor }} != 'openapi-performance-testing[bot]'
   image: docker://awtkns/openapi-perf-action:latest

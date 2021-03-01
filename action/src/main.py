@@ -1,3 +1,4 @@
+import json
 from io import BytesIO
 from os import environ
 from uuid import uuid4
@@ -9,7 +10,7 @@ from matplotlib import pyplot as plt
 from firebase import firestore
 
 OPEN_API_ENDPOINT = environ.get('INPUT_OPENAPI-ENDPOINT', "Could not find endpoint")
-APP_ENDPOINT = 'https://app.openapi-perf.awtkns.com/api/'
+APP_ENDPOINT = 'https://api.openapi-perf.awtkns.com'
 
 GITHUB_EVENT_PATH = environ.get('GITHUB_EVENT_PATH')
 GITHUB_REPOSITORY = environ.get('GITHUB_REPOSITORY', 'awtkns/openapi-perf-action')
@@ -60,13 +61,8 @@ if __name__ == '__main__':
     comment = f'Performance Report\n---\nFrom a serverless function!\n<p align="center"><img src="{firestore.child(url).get_url("")}"></p>'
 
     res = r.post(
-        url=APP_ENDPOINT,
-        json={
-            'content': comment,
-            'owner': 'awtkns',
-            'repository': 'openapi-perf-action',
-            'pr_number': 1
-        }
+        url=f'{APP_ENDPOINT}/comment',
+        json=action_factory(comment)
     )
 
     assert res.status_code == 200, "Could not upload Performance report"
