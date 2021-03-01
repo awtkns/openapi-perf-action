@@ -11,6 +11,14 @@ from firebase import firestore
 OPEN_API_ENDPOINT = environ.get('INPUT_OPENAPI-ENDPOINT', "Could not find endpoint")
 APP_ENDPOINT = 'https://app.openapi-perf.awtkns.com/api/'
 
+GITHUB_EVENT_PATH = environ.get('GITHUB_EVENT_PATH')
+GITHUB_REPOSITORY = environ.get('GITHUB_REPOSITORY', 'awtkns/openapi-perf-action')
+
+with open(GITHUB_EVENT_PATH) as fp:
+    print(json.load(fp))
+
+print(environ)
+
 
 def fig_to_base64():
     plt_bytes = BytesIO()
