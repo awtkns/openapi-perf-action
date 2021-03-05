@@ -21,6 +21,8 @@
 
 **Github App**: <a href="https://github.com/apps/openapi-performance-testing" target="_blank">https://github.com/apps/openapi-performance-testing</a>
 
+**OpenAPI Perf**: <a href="https://github.com/awtkns/openapi-perf" target="_blank">https://github.com/awtkns/openapi-perf</a>
+
 ---
 
 A github action for openapi-pref has been created to allow you to use openapi-perf in github workflows. Additionally, you can install the openapi-perf github app which will automatically comment and upload the generated report. Without the app installed, the report will be uploaded as a workflow artifact.
