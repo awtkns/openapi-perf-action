@@ -1,7 +1,11 @@
 import json
+
+from pathlib import Path
 from io import BytesIO
 from os import environ
+
 from uuid import uuid4
+
 
 import requests as r
 from openapi_perf import OpenAPIPerf
@@ -14,8 +18,11 @@ APP_ENDPOINT = 'https://api.openapi-perf.awtkns.com'
 GITHUB_ACTOR = environ.get('GITHUB_ACTOR', '')
 GITHUB_WORKSPACE = environ.get('GITHUB_WORKSPACE', '/out')
 
+RESULTS_DIR = Path(GITHUB_WORKSPACE) / ".openapi-perf"
+RESULTS_DIR.mkdir(exist_ok=True)
+
 print(environ)
-print("WORKSPACE", GITHUB_WORKSPACE)
+print("WORKSPACE", GITHUB_WORKSPACE, RESULTS_DIR)
 
 # TODO: Place this infinite loop safeguard in action yml so we don't'
 if '[bot]' in GITHUB_ACTOR:
@@ -53,7 +60,7 @@ if __name__ == '__main__':
 
     op = OpenAPIPerf(OPEN_API_ENDPOINT)
     results = op.run()
-    results.to_csv(GITHUB_WORKSPACE + "/results.csv")
+    results.to_csv(RESULTS_DIR / "results.csv")
 
     fig = results.plot(show=False)
     file = fig_to_base64(fig)
