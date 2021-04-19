@@ -21,9 +21,6 @@ GITHUB_WORKSPACE = environ.get('GITHUB_WORKSPACE', '/out')
 RESULTS_DIR = Path(GITHUB_WORKSPACE) / ".openapi-perf"
 RESULTS_DIR.mkdir(exist_ok=True)
 
-print(environ)
-print("WORKSPACE", GITHUB_WORKSPACE, RESULTS_DIR)
-
 # TODO: Place this infinite loop safeguard in action yml so we don't'
 if '[bot]' in GITHUB_ACTOR:
     print("[SKIPPING] Bot cannot trigger as safeguard")
@@ -59,10 +56,13 @@ if __name__ == '__main__':
     assert res.status_code == 200, "Could not React to action"
 
     op = OpenAPIPerf(OPEN_API_ENDPOINT)
+    op.test_schema.save(RESULTS_DIR / "tests.json")
+
     results = op.run()
     results.to_csv(RESULTS_DIR / "results.csv")
 
     fig = results.plot(show=False)
+    fig.savefig(RESULTS_DIR / "plot.png")
     file = fig_to_base64(fig)
 
     url = f'charts/{uuid4().hex}'
