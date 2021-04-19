@@ -8,7 +8,7 @@ from openapi_perf import OpenAPIPerf
 
 from firebase import firestore
 
-OPEN_API_ENDPOINT = environ.get('INPUT_OPENAPI-ENDPOINT', "http://localhost:5000")
+OPEN_API_ENDPOINT = environ.get('INPUT_OPENAPI-ENDPOINT', "http://crudrouter:5000")
 APP_ENDPOINT = 'https://api.openapi-perf.awtkns.com'
 
 GITHUB_ACTOR = environ.get('GITHUB_ACTOR', '')
