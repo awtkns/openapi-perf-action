@@ -47,7 +47,7 @@ if __name__ == '__main__':
     )
     assert res.status_code == 200, "Could not React to action"
 
-    op = OpenAPIPerf(APP_ENDPOINT)
+    op = OpenAPIPerf(OPEN_API_ENDPOINT)
     results = op.run()
 
     fig = results.plot(show=False)
