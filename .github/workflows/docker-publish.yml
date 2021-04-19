@@ -11,6 +11,10 @@ env:
   IMAGE_NAME: openapi-perf-action
   DOCKERFILE: ./action
 
+  INTEGRATION_IMAGE_NAME: openapi-perf-action-service
+  INTEGRATION_DOCKERFILE: ./.github/integration
+
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -47,3 +51,18 @@ jobs:
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
   
           docker push $IMAGE_ID:$VERSION
+
+  push-integration:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build image
+        run: docker build INTEGRATION_DOCKERFILE --tag $INTEGRATION_IMAGE_NAME
+      - name: Log into registry
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+      - name: Push image
+        run: |
+          IMAGE_ID=${{ secrets.DOCKER_USERNAME }}/$INTEGRATION_IMAGE_NAME
+          docker tag INTEGRATION_IMAGE_NAME $IMAGE_ID:latest
+          docker push $IMAGE_ID:latest
