@@ -19,3 +19,7 @@ jobs:
       uses: awtkns/openapi-perf-action@main
       with:
         openapi-endpoint: 'http://localhost:5000'
+    - uses: actions/upload-artifact@v2
+      with:
+        name: perf-results
+        path: ${{ github.workspace }}

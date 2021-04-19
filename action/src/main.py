@@ -12,6 +12,10 @@ OPEN_API_ENDPOINT = environ.get('INPUT_OPENAPI-ENDPOINT', "http://crudrouter:500
 APP_ENDPOINT = 'https://api.openapi-perf.awtkns.com'
 
 GITHUB_ACTOR = environ.get('GITHUB_ACTOR', '')
+GITHUB_WORKSPACE = environ.get('GITHUB_WORKSPACE', '/out')
+
+print(environ)
+print("WORKSPACE", GITHUB_WORKSPACE)
 
 # TODO: Place this infinite loop safeguard in action yml so we don't'
 if '[bot]' in GITHUB_ACTOR:
@@ -49,6 +53,7 @@ if __name__ == '__main__':
 
     op = OpenAPIPerf(OPEN_API_ENDPOINT)
     results = op.run()
+    results.to_csv(GITHUB_WORKSPACE + "/results.csv")
 
     fig = results.plot(show=False)
     file = fig_to_base64(fig)
