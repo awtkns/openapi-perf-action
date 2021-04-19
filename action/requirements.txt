@@ -3,3 +3,4 @@ pyrebase4
 numpy
 matplotlib
 requests
+openapi-perf
