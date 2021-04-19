@@ -5,7 +5,7 @@ from uuid import uuid4
 
 import requests as r
 
-from firebase import firestore
+# from firebase import firestore
 from openapi_perf import OpenAPIPerf
 
 OPEN_API_ENDPOINT = environ.get('INPUT_OPENAPI-ENDPOINT', "Could not find endpoint")
