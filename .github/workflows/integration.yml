@@ -7,8 +7,15 @@ jobs:
   openapi-perf:
     name: Builds and Runs the OpenAPI Performance Test Action
     runs-on: ubuntu-latest
+
+    services:
+      crudrouter:
+        image: awtkns/openapi-perf-action-service
+        ports:
+          - 5000:5000
+
     steps:
     - name: OpenAPI Performance Test
       uses: awtkns/openapi-perf-action@main
       with:
-        openapi-endpoint: 'http://localhost:5000/'
+        openapi-endpoint: 'http://localhost:5000'
